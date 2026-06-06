@@ -6,7 +6,7 @@ import hashlib
 app = Flask(__name__)
 # Change this secret key string when moving the site live on the internet
 app.secret_key = 'production_ready_secure_session_encryption_string_key'
-DB_FILE = 'database.db'
+DB_FILE = '/data/database.db'
 
 # Setup User Access Tracking Configurations
 login_manager = LoginManager()
