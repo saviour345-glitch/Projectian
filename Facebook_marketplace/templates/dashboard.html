@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard Inventory</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        .nav-bar { background: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #1877f2; color: white; }
+        .badge { padding: 5px 10px; border-radius: 4px; font-weight: bold; font-size: 0.8rem; display: inline-block; }
+        .badge.completed { background: #e2fbe8; color: #2e7d32; }
+        .badge.pending { background: #fff3cd; color: #856404; }
+        .secure-data { font-family: monospace; background: #f8f9fa; padding: 8px; border-radius: 4px; display: block; border:1px solid #ddd;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-bar">
+            <h2>Welcome, {{ current_user.username }}!</h2>
+            <div><a href="/" style="font-weight:bold; text-decoration:none; margin-right:15px;">Store</a><a href="/logout" style="color:red; font-weight:bold; text-decoration:none;">Logout</a></div>
+        </div>
+        <h3>Your Purchase Inventory Histories</h3>
+        <table>
+            <thead>
+                <tr><th>Item</th><th>Price</th><th>Method</th><th>Reference Code</th><th>Status</th><th>Credentials Delivery</th></tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td><strong>{{ order.title }}</strong></td>
+                    <td>${{ "%.2f"|format(order.price) }}</td>
+                    <td>{{ order.payment_method }}</td>
+                    <td><code>{{ order.reference_code }}</code></td>
+                    <td>
+                        {% if order.status == 'Completed' %}
+                            <span class="badge completed">Completed</span>
+                        {% else %}
+                            <span class="badge pending">Pending Verification</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if order.status == 'Completed' %}
+                            <code class="secure-data">{{ order.credentials }}</code>
+                        {% else %}
+                            <span style="color:#7f8c8d; font-size:0.85rem; font-style:italic;">🔒 Processing payment verification...</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

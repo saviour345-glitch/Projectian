@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marketplace Authentication</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .auth-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 100%; max-width: 360px; text-align: center; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 12px; background: #1877f2; border: none; color: white; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        .toggle-link { margin-top: 15px; display: block; color: #1877f2; text-decoration: none; cursor: pointer; font-size: 0.9rem; }
+        .alert { background: #ffcccc; color: #cc0000; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        <h2 id="formTitle">User Access Login</h2>
+        
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for msg in messages %}<div class="alert">{{ msg }}</div>{% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/login">
+            <input type="hidden" name="action" id="formAction" value="login">
+            <div class="input-group"><label>Username</label><input type="text" name="username" required></div>
+            <div class="input-group" id="emailGroup" style="display: none;"><label>Email Address</label><input type="email" name="email"></div>
+            <div class="input-group"><label>Password</label><input type="password" name="password" required></div>
+            <button type="submit" class="btn" id="btnText">Log In</button>
+            <a class="toggle-link" onclick="toggleForm()" id="toggleText">Need an account? Register here</a>
+        </form>
+    </div>
+
+    <script>
+        function toggleForm() {
+            const action = document.getElementById('formAction'), email = document.getElementById('emailGroup');
+            const title = document.getElementById('formTitle'), btn = document.getElementById('btnText'), toggle = document.getElementById('toggleText');
+            if (action.value === 'login') {
+                action.value = 'register'; email.style.display = 'block'; title.innerText = 'Create New Account'; btn.innerText = 'Register Account'; toggle.innerText = 'Already have an account? Log in';
+            } else {
+                action.value = 'login'; email.style.display = 'none'; title.innerText = 'User Access Login'; btn.innerText = 'Log In'; toggle.innerText = 'Need an account? Register here';
+            }
+        }
+    </script>
+</body>
+</html>
